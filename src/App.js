@@ -5,8 +5,6 @@ import { useState, useEffect } from "react";
 import { Container, Col, Row, Card, Spinner, Alert } from "react-bootstrap";
 
 function App() {
-  const [loaded, setLoaded] = useState(false);
-
   const [aral, setAral] = useState(null);
   const [jet, setJet] = useState(null);
   const [hem, setHem] = useState(null);
@@ -63,25 +61,19 @@ function App() {
 
   useEffect(() => {
     if (aral && jet && hem) {
-      setLoaded(true);
-    } else {
-      setLoaded(false);
+      setTimeout(() => {
+        let calcArr = [{ ...aral }, { ...jet }, { ...hem }];
+        calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
+        calcArr[0].isCheapest_e5 = true;
+        calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
+        calcArr[0].isCheapest_e10 = true;
+        calcArr = calcArr.sort((a, b) => a.diesel - b.diesel);
+        calcArr[0].isCheapest_diesel = true;
+        console.log("calcArr:", calcArr);
+        setTankstellen([...calcArr]);
+      }, 1500);
     }
   }, [aral, jet, hem]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      let calcArr = [{ ...aral }, { ...jet }, { ...hem }];
-      calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
-      calcArr[0].isCheapest_e5 = true;
-      calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
-      calcArr[0].isCheapest_e10 = true;
-      calcArr = calcArr.sort((a, b) => a.diesel - b.diesel);
-      calcArr[0].isCheapest_diesel = true;
-      console.log("calcArr:", calcArr);
-      setTankstellen([...calcArr]);
-    }, 2500);
-  }, [loaded]);
 
   return (
     <Container fluid className="justify-content-center">
