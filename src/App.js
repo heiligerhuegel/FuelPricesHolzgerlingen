@@ -2,161 +2,150 @@ import axios from "axios";
 import "./App.css";
 import React from "react";
 import { useState, useEffect } from "react";
-
-import { Container, Col, Row, Card, Spinner } from "react-bootstrap";
+import { Container, Col, Row, Card, Spinner, Alert } from "react-bootstrap";
 
 function App() {
+  const [loaded, setLoaded] = useState(false);
+
   const [aral, setAral] = useState(null);
   const [jet, setJet] = useState(null);
   const [hem, setHem] = useState(null);
 
-  useEffect(() => {
-    const fetchAral = async () => {
-      const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=24441cab-3a2c-4e95-8640-755b70b541c8&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
-      setAral(response.data);
-      console.log(response.data);
-    };
-    fetchAral();
+  const [tankstellen, setTankstellen] = useState([]);
 
-    const fetchJet = async () => {
-      const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=51d4b49c-a095-1aa0-e100-80009459e03a&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
-      setJet(response.data);
-      console.log(response.data);
+  useEffect(async () => {
+    const setPseudoData = async () => {
+      const aralpseudo = {
+        id: "aral",
+        brand: "Aral",
+        e5: 1.729,
+        e10: 1.669,
+        diesel: 1.539,
+      };
+      await setAral(aralpseudo);
+      const jetpseudo = {
+        id: "jet",
+        brand: "JET",
+        e5: 1.829,
+        e10: 1.569,
+        diesel: 1.639,
+      };
+      await setJet(jetpseudo);
+      const hempseudo = {
+        id: "hem",
+        brand: "HEM",
+        e5: 1.929,
+        e10: 1.469,
+        diesel: 1.739,
+      };
+      await setHem(hempseudo);
     };
-    fetchJet();
-    const fetchHem = async () => {
-      const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=4b6ad6c8-e9c1-4c65-bd1e-aa6d6c007626&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
-      setHem(response.data);
-      console.log(response.data);
-    };
-    fetchHem();
+    await setPseudoData();
+
+    // const fetchAral = async () => {
+    //   const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=24441cab-3a2c-4e95-8640-755b70b541c8&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
+    //   setAral(response.data.station);
+    //   console.log(response.data.station);
+    // };
+    // fetchAral();
+
+    // const fetchJet = async () => {
+    //   const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=51d4b49c-a095-1aa0-e100-80009459e03a&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
+    //   setJet(response.data.station);
+    //   console.log(response.data.station);
+    // };
+    // fetchJet();
+
+    // const fetchHem = async () => {
+    //   const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=4b6ad6c8-e9c1-4c65-bd1e-aa6d6c007626&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
+    //   setHem(response.data.station);
+    //   console.log(response.data.station);
+    // };
+    // fetchHem();
   }, []);
 
+  useEffect(() => {
+    if (aral && jet && hem) {
+      setLoaded(true);
+    } else {
+      setLoaded(false);
+    }
+  }, [aral, jet, hem]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      let calcArr = [aral, jet, hem];
+      calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
+      calcArr[0].isCheapest_e5 = true;
+      calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
+      calcArr[0].isCheapest_e10 = true;
+      calcArr = calcArr.sort((a, b) => a.diesel - b.diesel);
+      calcArr[0].isCheapest_diesel = true;
+      console.log("calcArr:", calcArr);
+      setTankstellen([...calcArr]);
+    }, 1500);
+  }, [loaded]);
+
+  // items.sort(function (a, b) {
+  //   return a.value - b.value;
+  // });
+
   return (
-    <Container fluid>
-      <Row className="justify-content-center">
-        {!aral && (
-          <Card id="loadingAral" style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
+    <Container fluid className="justify-content-center">
+      {tankstellen.length === 0 && (
+        <Row id="loading" className="justify-content-center">
+          <Card style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
             <Card.Body>
-              <Card.Title>ARAL Loading...</Card.Title>
-              <Spinner className="my-5" animation="border" />
+              <Card.Title>Loading Data: </Card.Title>
+              <Spinner animation="border" className="justify-content-center" />
             </Card.Body>
           </Card>
-        )}
-        {aral && (
-          <Card id="aral" style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
-            <Card.Body>
-              <Card.Title>{aral.station.brand}</Card.Title>
-              <Row>
-                <Col>
-                  <h5>E10</h5>
-                </Col>
-                <Col>
-                  <h6>{aral.station.e10}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h5>SUPER</h5>
-                </Col>
-                <Col>
-                  <h6>{aral.station.e5}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h5>Diesel</h5>
-                </Col>
-                <Col>
-                  <h6>{aral.station.diesel}</h6>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        )}
-      </Row>
-      <Row className="justify-content-center">
-        {!jet && (
-          <Card id="loadingjet" style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
-            <Card.Body>
-              <Card.Title>JET Loading...</Card.Title>
-              <Spinner className="my-5" animation="border" />
-            </Card.Body>
-          </Card>
-        )}
-        {jet && (
-          <Card id="aral" style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
-            <Card.Body>
-              <Card.Title>{jet.station.brand}</Card.Title>
-              <Row>
-                <Col>
-                  <h5>E10</h5>
-                </Col>
-                <Col>
-                  <h6>{jet.station.e10}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h5>SUPER</h5>
-                </Col>
-                <Col>
-                  <h6>{jet.station.e5}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h5>Diesel</h5>
-                </Col>
-                <Col>
-                  <h6>{jet.station.diesel}</h6>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        )}
-      </Row>
-      <Row className="justify-content-center">
-        {!hem && (
-          <Card id="loadinghem" style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
-            <Card.Body>
-              <Card.Title>HEM Loading...</Card.Title>
-              <Spinner className="my-5" animation="border" />
-            </Card.Body>
-          </Card>
-        )}
-        {hem && (
-          <Card id="hem" style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
-            <Card.Body>
-              <Card.Title>{hem.station.brand}</Card.Title>
-              <Row>
-                <Col>
-                  <h5>E10</h5>
-                </Col>
-                <Col>
-                  <h6>{hem.station.e10}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h5>SUPER</h5>
-                </Col>
-                <Col>
-                  <h6>{hem.station.e5}</h6>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <h5>Diesel</h5>
-                </Col>
-                <Col>
-                  <h6>{hem.station.diesel}</h6>
-                </Col>
-              </Row>
-            </Card.Body>
-          </Card>
-        )}
-      </Row>
+        </Row>
+      )}
+      {tankstellen[0] !== null &&
+        tankstellen.map((e, i) => {
+          return (
+            <Row key={e.brand} className="justify-content-center">
+              <Card style={{ width: "20rem" }} className="my-1 mx-1">
+                <Card.Body>
+                  <Card.Title>{e.brand}</Card.Title>
+
+                  <Alert variant={e.isCheapest_e10 ? "success" : "dark"}>
+                    <Row>
+                      <Col>
+                        <h5>e10</h5>
+                      </Col>
+                      <Col>
+                        <h6>{e.e10}</h6>
+                      </Col>
+                    </Row>
+                  </Alert>
+
+                  <Alert variant={e.isCheapest_e5 ? "success" : "dark"}>
+                    <Row>
+                      <Col>
+                        <h5>Super</h5>
+                      </Col>
+                      <Col>
+                        <h6>{e.e5}</h6>
+                      </Col>
+                    </Row>
+                  </Alert>
+                  <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
+                    <Row>
+                      <Col>
+                        <h5>Diesel</h5>
+                      </Col>
+                      <Col>
+                        <h6>{e.diesel}</h6>
+                      </Col>
+                    </Row>
+                  </Alert>
+                </Card.Body>
+              </Card>
+            </Row>
+          );
+        })}
     </Container>
   );
 }
