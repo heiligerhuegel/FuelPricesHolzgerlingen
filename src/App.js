@@ -14,54 +14,51 @@ function App() {
   const [tankstellen, setTankstellen] = useState([]);
 
   useEffect(async () => {
-    const setPseudoData = async () => {
-      const aralpseudo = {
-        id: "aral",
-        brand: "Aral",
-        e5: 1.729,
-        e10: 1.669,
-        diesel: 1.539,
-      };
-      await setAral(aralpseudo);
-      const jetpseudo = {
-        id: "jet",
-        brand: "JET",
-        e5: 1.829,
-        e10: 1.569,
-        diesel: 1.639,
-      };
-      await setJet(jetpseudo);
-      const hempseudo = {
-        id: "hem",
-        brand: "HEM",
-        e5: 1.929,
-        e10: 1.469,
-        diesel: 1.739,
-      };
-      await setHem(hempseudo);
+    // const setPseudoData = async () => {
+    //   const aralpseudo = {
+    //     id: "aral",
+    //     brand: "Aral",
+    //     e5: 1.729,
+    //     e10: 1.669,
+    //     diesel: 1.539,
+    //   };
+    //   await setAral(aralpseudo);
+    //   const jetpseudo = {
+    //     id: "jet",
+    //     brand: "JET",
+    //     e5: 1.829,
+    //     e10: 1.569,
+    //     diesel: 1.639,
+    //   };
+    //   await setJet(jetpseudo);
+    //   const hempseudo = {
+    //     id: "hem",
+    //     brand: "HEM",
+    //     e5: 1.929,
+    //     e10: 1.469,
+    //     diesel: 1.739,
+    //   };
+    //   await setHem(hempseudo);
+    // };
+    // await setPseudoData();
+
+    const fetchAral = async () => {
+      const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=24441cab-3a2c-4e95-8640-755b70b541c8&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
+      setAral(response.data.station);
     };
-    await setPseudoData();
+    fetchAral();
 
-    // const fetchAral = async () => {
-    //   const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=24441cab-3a2c-4e95-8640-755b70b541c8&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
-    //   setAral(response.data.station);
-    //   console.log(response.data.station);
-    // };
-    // fetchAral();
+    const fetchJet = async () => {
+      const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=51d4b49c-a095-1aa0-e100-80009459e03a&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
+      setJet(response.data.station);
+    };
+    fetchJet();
 
-    // const fetchJet = async () => {
-    //   const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=51d4b49c-a095-1aa0-e100-80009459e03a&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
-    //   setJet(response.data.station);
-    //   console.log(response.data.station);
-    // };
-    // fetchJet();
-
-    // const fetchHem = async () => {
-    //   const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=4b6ad6c8-e9c1-4c65-bd1e-aa6d6c007626&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
-    //   setHem(response.data.station);
-    //   console.log(response.data.station);
-    // };
-    // fetchHem();
+    const fetchHem = async () => {
+      const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=4b6ad6c8-e9c1-4c65-bd1e-aa6d6c007626&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
+      setHem(response.data.station);
+    };
+    fetchHem();
   }, []);
 
   useEffect(() => {
