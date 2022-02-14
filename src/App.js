@@ -71,7 +71,7 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
-      let calcArr = [aral, jet, hem];
+      let calcArr = [{ ...aral }, { ...jet }, { ...hem }];
       calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
       calcArr[0].isCheapest_e5 = true;
       calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
@@ -81,7 +81,7 @@ function App() {
       console.log("calcArr:", calcArr);
       setTankstellen([...calcArr]);
     }, 2500);
-  }, []);
+  }, [loaded]);
 
   return (
     <Container fluid className="justify-content-center">
