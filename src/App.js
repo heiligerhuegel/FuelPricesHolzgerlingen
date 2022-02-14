@@ -80,12 +80,8 @@ function App() {
       calcArr[0].isCheapest_diesel = true;
       console.log("calcArr:", calcArr);
       setTankstellen([...calcArr]);
-    }, 1500);
-  }, [loaded]);
-
-  // items.sort(function (a, b) {
-  //   return a.value - b.value;
-  // });
+    }, 2500);
+  }, []);
 
   return (
     <Container fluid className="justify-content-center">
