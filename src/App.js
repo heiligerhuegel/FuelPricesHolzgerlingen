@@ -13,7 +13,7 @@ function App() {
 
   const [tankstellen, setTankstellen] = useState([]);
 
-  useEffect(async () => {
+  useEffect(() => {
     // const setPseudoData = async () => {
     //   const aralpseudo = {
     //     id: "aral",
