@@ -12,32 +12,32 @@ function App() {
   const [tankstellen, setTankstellen] = useState([]);
 
   useEffect(() => {
-    const setPseudoData = async () => {
-      const aralpseudo = {
-        id: "aral",
-        brand: "Aral",
-        e5: 1.729,
-        e10: 1.669,
-        diesel: 1.539,
-      };
-      await setAral(aralpseudo);
-      const jetpseudo = {
-        id: "jet",
-        brand: "JET",
-        e5: 1.829,
-        e10: 1.569,
-        diesel: 1.639,
-      };
-      await setJet(jetpseudo);
-      const hempseudo = {
-        id: "hem",
-        brand: "HEM",
-        e5: 1.929,
-        e10: 1.469,
-        diesel: 1.739,
-      };
-      await setHem(hempseudo);
-    };
+    // const setPseudoData = async () => {
+    //   const aralpseudo = {
+    //     id: "aral",
+    //     brand: "Aral",
+    //     e5: 1.729,
+    //     e10: 1.669,
+    //     diesel: 1.539,
+    //   };
+    //   await setAral(aralpseudo);
+    //   const jetpseudo = {
+    //     id: "jet",
+    //     brand: "JET",
+    //     e5: 1.829,
+    //     e10: 1.569,
+    //     diesel: 1.639,
+    //   };
+    //   await setJet(jetpseudo);
+    //   const hempseudo = {
+    //     id: "hem",
+    //     brand: "HEM",
+    //     e5: 1.929,
+    //     e10: 1.469,
+    //     diesel: 1.739,
+    //   };
+    //   await setHem(hempseudo);
+    // };
     // setPseudoData();
 
     const fetchAral = async () => {
