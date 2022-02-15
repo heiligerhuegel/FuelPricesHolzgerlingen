@@ -12,33 +12,33 @@ function App() {
   const [tankstellen, setTankstellen] = useState([]);
 
   useEffect(() => {
-    // const setPseudoData = async () => {
-    //   const aralpseudo = {
-    //     id: "aral",
-    //     brand: "Aral",
-    //     e5: 1.729,
-    //     e10: 1.669,
-    //     diesel: 1.539,
-    //   };
-    //   await setAral(aralpseudo);
-    //   const jetpseudo = {
-    //     id: "jet",
-    //     brand: "JET",
-    //     e5: 1.829,
-    //     e10: 1.569,
-    //     diesel: 1.639,
-    //   };
-    //   await setJet(jetpseudo);
-    //   const hempseudo = {
-    //     id: "hem",
-    //     brand: "HEM",
-    //     e5: 1.929,
-    //     e10: 1.469,
-    //     diesel: 1.739,
-    //   };
-    //   await setHem(hempseudo);
-    // };
-    // await setPseudoData();
+    const setPseudoData = async () => {
+      const aralpseudo = {
+        id: "aral",
+        brand: "Aral",
+        e5: 1.729,
+        e10: 1.669,
+        diesel: 1.539,
+      };
+      await setAral(aralpseudo);
+      const jetpseudo = {
+        id: "jet",
+        brand: "JET",
+        e5: 1.829,
+        e10: 1.569,
+        diesel: 1.639,
+      };
+      await setJet(jetpseudo);
+      const hempseudo = {
+        id: "hem",
+        brand: "HEM",
+        e5: 1.929,
+        e10: 1.469,
+        diesel: 1.739,
+      };
+      await setHem(hempseudo);
+    };
+    // setPseudoData();
 
     const fetchAral = async () => {
       const response = await axios.get(`https://creativecommons.tankerkoenig.de/json/detail.php?id=24441cab-3a2c-4e95-8640-755b70b541c8&apikey=011bc4a1-c50e-3acf-c3b6-ade3a2359d40`);
@@ -102,61 +102,63 @@ function App() {
 
   return (
     <Container fluid className="justify-content-center">
-      {tankstellen.length === 0 && (
-        <Row id="loading" className="justify-content-center">
-          <Card style={{ width: "20rem", height: "10rem" }} className="my-1 mx-1">
-            <Card.Body>
-              <Card.Title>Loading Data: </Card.Title>
-              <Spinner animation="border" className="justify-content-center" />
-            </Card.Body>
-          </Card>
-        </Row>
-      )}
-      {tankstellen[0] !== null &&
-        tankstellen.map((e, i) => {
-          return (
-            <Row key={e.brand} className="justify-content-center">
-              <Card style={{ width: "20rem" }} className="my-1 mx-1">
-                <Card.Body>
-                  <Card.Title>{e.brand}</Card.Title>
+      <Row>
+        {tankstellen.length === 0 && (
+          <Col key="loading" className="justify-content-center">
+            <Card style={{ width: "20rem" }} className="my-1 mx-1">
+              <Card.Body>
+                <Card.Title>{<h5>Loading Data:</h5>}</Card.Title>
+                <Spinner animation="border" className="justify-content-center" />
+              </Card.Body>
+            </Card>
+          </Col>
+        )}
+        {tankstellen[0] !== null &&
+          tankstellen.map((e, i) => {
+            return (
+              <Col key={e.brand} className="justify-content-center">
+                <Card style={{ width: "20rem" }} className="my-1 mx-1">
+                  <Card.Body>
+                    <Card.Title>{e.brand}</Card.Title>
 
-                  <Alert variant={e.isCheapest_e10 ? "success" : "dark"}>
-                    <Row>
-                      <Col>
-                        <h5>e10</h5>
-                      </Col>
-                      <Col>
-                        <h6>{e.e10}</h6>
-                      </Col>
-                    </Row>
-                  </Alert>
+                    <Alert variant={e.isCheapest_e10 ? "success" : "dark"}>
+                      <Row>
+                        <Col>
+                          <h5>e10</h5>
+                        </Col>
+                        <Col>
+                          <h6>{e.e10}</h6>
+                        </Col>
+                      </Row>
+                    </Alert>
 
-                  <Alert variant={e.isCheapest_e5 ? "success" : "dark"}>
-                    <Row>
-                      <Col>
-                        <h5>Super</h5>
-                      </Col>
-                      <Col>
-                        <h6>{e.e5}</h6>
-                      </Col>
-                    </Row>
-                  </Alert>
+                    <Alert variant={e.isCheapest_e5 ? "success" : "dark"}>
+                      <Row>
+                        <Col>
+                          <h5>Super</h5>
+                        </Col>
+                        <Col>
+                          <h6>{e.e5}</h6>
+                        </Col>
+                      </Row>
+                    </Alert>
 
-                  <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
-                    <Row>
-                      <Col>
-                        <h5>Diesel</h5>
-                      </Col>
-                      <Col>
-                        <h6>{e.diesel}</h6>
-                      </Col>
-                    </Row>
-                  </Alert>
-                </Card.Body>
-              </Card>
-            </Row>
-          );
-        })}
+                    <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
+                      <Row>
+                        <Col>
+                          <h5>Diesel</h5>
+                        </Col>
+                        <Col>
+                          <h6>{e.diesel}</h6>
+                        </Col>
+                      </Row>
+                    </Alert>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+      </Row>
     </Container>
   );
 }
