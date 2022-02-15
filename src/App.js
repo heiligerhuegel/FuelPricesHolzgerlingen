@@ -63,12 +63,37 @@ function App() {
     if (aral && jet && hem) {
       setTimeout(() => {
         let calcArr = [{ ...aral }, { ...jet }, { ...hem }];
+        let cheapestPrice = 0;
+
         calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
-        calcArr[0].isCheapest_e5 = true;
+        cheapestPrice = calcArr[0].e5;
+        calcArr = calcArr.map((e) => {
+          if (e.e5 === cheapestPrice) {
+            e.isCheapest_e5 = true;
+          }
+          return e;
+        });
+
         calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
-        calcArr[0].isCheapest_e10 = true;
+        cheapestPrice = calcArr[0].e10;
+        calcArr = calcArr.map((e) => {
+          if (e.e10 === cheapestPrice) {
+            e.isCheapest_e10 = true;
+          }
+          return e;
+        });
+
         calcArr = calcArr.sort((a, b) => a.diesel - b.diesel);
-        calcArr[0].isCheapest_diesel = true;
+        cheapestPrice = calcArr[0].diesel;
+        calcArr = calcArr.map((e) => {
+          if (e.diesel === cheapestPrice) {
+            e.isCheapest_diesel = true;
+          }
+          return e;
+        });
+
+        calcArr = calcArr.sort((a, b) => a.brand + b.brand);
+
         console.log("calcArr:", calcArr);
         setTankstellen([...calcArr]);
       }, 1500);
@@ -116,6 +141,7 @@ function App() {
                       </Col>
                     </Row>
                   </Alert>
+
                   <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
                     <Row>
                       <Col>
