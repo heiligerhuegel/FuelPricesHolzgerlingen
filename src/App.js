@@ -19,6 +19,7 @@ function App() {
     //     e5: 1.729,
     //     e10: 1.669,
     //     diesel: 1.539,
+    //     isOpen: true,
     //   };
     //   await setAral(aralpseudo);
     //   const jetpseudo = {
@@ -27,6 +28,7 @@ function App() {
     //     e5: 1.829,
     //     e10: 1.569,
     //     diesel: 1.639,
+    //     isOpen: false,
     //   };
     //   await setJet(jetpseudo);
     //   const hempseudo = {
@@ -35,6 +37,7 @@ function App() {
     //     e5: 1.929,
     //     e10: 1.469,
     //     diesel: 1.739,
+    //     isOpen: false,
     //   };
     //   await setHem(hempseudo);
     // };
@@ -120,39 +123,53 @@ function App() {
                 <Card style={{ width: "20rem" }} className="my-1 mx-1">
                   <Card.Body>
                     <Card.Title>{e.brand}</Card.Title>
+                    {e.isOpen && (
+                      <Container>
+                        <Alert variant={e.isCheapest_e10 ? "success" : "dark"}>
+                          <Row>
+                            <Col>
+                              <h5>e10</h5>
+                            </Col>
+                            <Col>
+                              <h6>{e.e10}</h6>
+                            </Col>
+                          </Row>
+                        </Alert>
 
-                    <Alert variant={e.isCheapest_e10 ? "success" : "dark"}>
-                      <Row>
-                        <Col>
-                          <h5>e10</h5>
-                        </Col>
-                        <Col>
-                          <h6>{e.e10}</h6>
-                        </Col>
-                      </Row>
-                    </Alert>
+                        <Alert variant={e.isCheapest_e5 ? "success" : "dark"}>
+                          <Row>
+                            <Col>
+                              <h5>Super</h5>
+                            </Col>
+                            <Col>
+                              <h6>{e.e5}</h6>
+                            </Col>
+                          </Row>
+                        </Alert>
 
-                    <Alert variant={e.isCheapest_e5 ? "success" : "dark"}>
-                      <Row>
-                        <Col>
-                          <h5>Super</h5>
-                        </Col>
-                        <Col>
-                          <h6>{e.e5}</h6>
-                        </Col>
-                      </Row>
-                    </Alert>
-
-                    <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
-                      <Row>
-                        <Col>
-                          <h5>Diesel</h5>
-                        </Col>
-                        <Col>
-                          <h6>{e.diesel}</h6>
-                        </Col>
-                      </Row>
-                    </Alert>
+                        <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
+                          <Row>
+                            <Col>
+                              <h5>Diesel</h5>
+                            </Col>
+                            <Col>
+                              <h6>{e.diesel}</h6>
+                            </Col>
+                          </Row>
+                        </Alert>
+                      </Container>
+                    )}
+                    {!e.isOpen && (
+                      <Container>
+                        <Alert variant="danger">
+                          <Row>
+                            <Col>
+                              <h5>Currently Closed</h5>
+                            </Col>
+                          </Row>
+                        </Alert>
+                      </Container>
+                    )}
                   </Card.Body>
                 </Card>
               </Col>
