@@ -9,37 +9,45 @@ function App() {
   const [jet, setJet] = useState(null);
   const [hem, setHem] = useState(null);
 
+  const [e5, sete5] = useState(0);
+  const [e10, sete10] = useState(0);
+  const [diesel, setdiesel] = useState(0);
+
   const [tankstellen, setTankstellen] = useState([]);
+  const [closedstellen, setClosedStellen] = useState([]);
 
   useEffect(() => {
     // const setPseudoData = async () => {
     //   const aralpseudo = {
     //     id: "aral",
     //     brand: "Aral",
-    //     e5: 1.729,
-    //     e10: 1.669,
-    //     diesel: 1.539,
+    //     e5: getRandomArbitrary(),
+    //     e10: getRandomArbitrary(),
+    //     diesel: getRandomArbitrary(),
     //     isOpen: true,
     //   };
     //   await setAral(aralpseudo);
     //   const jetpseudo = {
     //     id: "jet",
     //     brand: "JET",
-    //     e5: 1.829,
-    //     e10: 1.569,
-    //     diesel: 1.639,
-    //     isOpen: false,
+    //     e5: getRandomArbitrary(),
+    //     e10: getRandomArbitrary(),
+    //     diesel: getRandomArbitrary(),
+    //     isOpen: true,
     //   };
     //   await setJet(jetpseudo);
     //   const hempseudo = {
     //     id: "hem",
     //     brand: "HEM",
-    //     e5: 1.929,
-    //     e10: 1.469,
-    //     diesel: 1.739,
-    //     isOpen: false,
+    //     e5: getRandomArbitrary(),
+    //     e10: getRandomArbitrary(),
+    //     diesel: getRandomArbitrary(),
+    //     isOpen: true,
     //   };
     //   await setHem(hempseudo);
+    // };
+    // const getRandomArbitrary = () => {
+    //   return Math.random().toFixed(0) * (1.8 - 1.5) + 1.5;
     // };
     // setPseudoData();
 
@@ -66,39 +74,21 @@ function App() {
     if (aral && jet && hem) {
       setTimeout(() => {
         let calcArr = [{ ...aral }, { ...jet }, { ...hem }];
-        let cheapestPrice = 0;
-
-        calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
-        cheapestPrice = calcArr[0].e5;
-        calcArr = calcArr.map((e) => {
-          if (e.e5 === cheapestPrice) {
-            e.isCheapest_e5 = true;
-          }
-          return e;
-        });
-
-        calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
-        cheapestPrice = calcArr[0].e10;
-        calcArr = calcArr.map((e) => {
-          if (e.e10 === cheapestPrice) {
-            e.isCheapest_e10 = true;
-          }
-          return e;
-        });
-
-        calcArr = calcArr.sort((a, b) => a.diesel - b.diesel);
-        cheapestPrice = calcArr[0].diesel;
-        calcArr = calcArr.map((e) => {
-          if (e.diesel === cheapestPrice) {
-            e.isCheapest_diesel = true;
-          }
-          return e;
-        });
-
-        calcArr = calcArr.sort((a, b) => a.brand + b.brand);
-
-        console.log("calcArr:", calcArr);
+        let closedArr = [];
+        closedArr = calcArr.filter((e) => e.isOpen === false);
+        calcArr = calcArr.filter((e) => e.isOpen === true);
+        if (calcArr.length > 0) {
+          calcArr = calcArr.sort((a, b) => a.e5 - b.e5);
+          sete5(calcArr[0].e5);
+          calcArr = calcArr.sort((a, b) => a.e10 - b.e10);
+          sete10(calcArr[0].e10);
+          calcArr = calcArr.sort((a, b) => a.diesel - b.diesel);
+          setdiesel(calcArr[0].diesel);
+          calcArr = calcArr.sort((a, b) => (a.brand === b.brand ? 0 : a.brand < b.brand ? 1 : -1));
+        }
+        setClosedStellen([...closedArr]);
         setTankstellen([...calcArr]);
+        console.log(calcArr);
       }, 1500);
     }
   }, [aral, jet, hem]);
@@ -106,70 +96,86 @@ function App() {
   return (
     <Container fluid className="justify-content-center">
       <Row>
-        {tankstellen.length === 0 && (
+        {tankstellen.length === 0 && closedstellen.length === 0 && (
           <Col key="loading" className="justify-content-center">
             <Card style={{ width: "20rem" }} className="my-1 mx-1">
               <Card.Body>
-                <Card.Title>{<h5>Loading Data:</h5>}</Card.Title>
-                <Spinner animation="border" className="justify-content-center" />
+                <Card.Title>{"Loading Data:"}</Card.Title>
+                <Container>
+                  <Alert variant="dark" className="justify-content-center">
+                    <Row>
+                      <Col className="justify-content-center">
+                        <Spinner animation="border" />
+                      </Col>
+                    </Row>
+                  </Alert>
+                </Container>
               </Card.Body>
             </Card>
           </Col>
         )}
         {tankstellen[0] !== null &&
-          tankstellen.map((e, i) => {
+          tankstellen.map((e) => {
             return (
               <Col key={e.brand} className="justify-content-center">
                 <Card style={{ width: "20rem" }} className="my-1 mx-1">
                   <Card.Body>
                     <Card.Title>{e.brand}</Card.Title>
-                    {e.isOpen && (
-                      <Container>
-                        <Alert variant={e.isCheapest_e10 ? "success" : "dark"}>
-                          <Row>
-                            <Col>
-                              <h5>e10</h5>
-                            </Col>
-                            <Col>
-                              <h6>{e.e10}</h6>
-                            </Col>
-                          </Row>
-                        </Alert>
+                    <Container>
+                      <Alert variant={e.e10 === e10 ? "success" : "dark"}>
+                        <Row>
+                          <Col>
+                            <h5>e10</h5>
+                          </Col>
+                          <Col>
+                            <h6>{e.e10}</h6>
+                          </Col>
+                        </Row>
+                      </Alert>
 
-                        <Alert variant={e.isCheapest_e5 ? "success" : "dark"}>
-                          <Row>
-                            <Col>
-                              <h5>Super</h5>
-                            </Col>
-                            <Col>
-                              <h6>{e.e5}</h6>
-                            </Col>
-                          </Row>
-                        </Alert>
+                      <Alert variant={e.e5 === e5 ? "success" : "dark"}>
+                        <Row>
+                          <Col>
+                            <h5>Super</h5>
+                          </Col>
+                          <Col>
+                            <h6>{e.e5}</h6>
+                          </Col>
+                        </Row>
+                      </Alert>
 
-                        <Alert variant={e.isCheapest_diesel ? "success" : "dark"}>
-                          <Row>
-                            <Col>
-                              <h5>Diesel</h5>
-                            </Col>
-                            <Col>
-                              <h6>{e.diesel}</h6>
-                            </Col>
-                          </Row>
-                        </Alert>
-                      </Container>
-                    )}
-                    {!e.isOpen && (
-                      <Container>
-                        <Alert variant="danger">
-                          <Row>
-                            <Col>
-                              <h5>Currently Closed</h5>
-                            </Col>
-                          </Row>
-                        </Alert>
-                      </Container>
-                    )}
+                      <Alert variant={e.diesel === diesel ? "success" : "dark"}>
+                        <Row>
+                          <Col>
+                            <h5>Diesel</h5>
+                          </Col>
+                          <Col>
+                            <h6>{e.diesel}</h6>
+                          </Col>
+                        </Row>
+                      </Alert>
+                    </Container>
+                  </Card.Body>
+                </Card>
+              </Col>
+            );
+          })}
+        {closedstellen &&
+          closedstellen.map((e) => {
+            return (
+              <Col key={e.brand} className="justify-content-center">
+                <Card style={{ width: "20rem" }} className="my-1 mx-1">
+                  <Card.Body>
+                    <Card.Title>{e.brand}</Card.Title>
+                    <Container>
+                      <Alert variant="danger">
+                        <Row>
+                          <Col>
+                            <h5>Closed</h5>
+                          </Col>
+                        </Row>
+                      </Alert>
+                    </Container>
                   </Card.Body>
                 </Card>
               </Col>
